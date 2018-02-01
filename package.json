@@ -1,0 +1,23 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "a local chat",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alexnorvag/olchat.git"
+  },
+  "author": "Alex Norvag <norvagalex@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alexnorvag/olchat/issues"
+  },
+  "homepage": "https://github.com/Alexnorvag/olchat#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
