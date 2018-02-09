@@ -1,0 +1,8 @@
+{
+	"db": {
+		"host": "localhost",
+		"port": 27017,
+		"name": "chatData"
+	},
+	"sessionSecret": "aAd1DCdcs131"
+}

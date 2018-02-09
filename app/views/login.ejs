@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Own Local Chat</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="container">
+            <h1>Welcome</h1>
+
+            <div class="form">
+                <form action="/register" class="register-form" method="post">
+                    <!-- <form class="register-form"> -->
+                    <input type="text" name="username" placeholder="Username">
+                    <input type="password" name="password" placeholder="Password">
+                    <button type="submit" id="register-button">Create</button>
+                    <p class="login__signup">Alreary registred? &nbsp;
+                        <a href="#">Sign In</a>
+                    </p>
+                    <% if (errors != null && showRegisterForm != null && showRegisterForm === true) { %>
+                        <% errors.forEach(function(err){ %>
+                            <p class="login__signup error">
+                                <%= err %>
+                            </p>
+                            <% }); %>
+                                <% } %>
+                </form>
+
+                <form action="/login" class="login-form" method="post">
+                    <!-- <form class="login-form"> -->
+                    <input type="text" name="username" placeholder="Username">
+                    <input type="password" name="password" placeholder="Password">
+                    <button type="submit" id="login-button">Login</button>
+                    <p class="login__signup">Don't have an account? &nbsp;
+                        <a href="#">Sign Up</a>
+                    </p>
+                    <% if (errors != null && showRegisterForm == null) { %>
+                        <% errors.forEach(function(err){ %>
+                            <p class="login__signup error">
+                                <%= err %>
+                            </p>
+                            <% }); %>
+                                <% } if (success != null && showRegisterForm == null) { %>
+                                    <p class="login__signup success">
+                                        <%= success %>
+                                    </p>
+                                    <% } %>
+                </form>
+            </div>
+        </div>
+
+        <ul class="bg-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <!-- <div class="login-page">
+        <div class="form">
+
+            <div class="form-line"></div>
+
+            <div style="margin-top: 18px;">
+                <form action="/register" class="register-form" method="post">
+                    <input type="text" name="username" placeholder="username" />
+                    <input type="password" name="password" placeholder="password" />
+                    <button type="submit">create</button>
+                    <p class="message">Already registered?
+                        <a href="#">Sign In</a>
+                    </p>
+                    <% if (errors != null && showRegisterForm != null && showRegisterForm === true) { %>
+                        <% errors.forEach(function(err){ %>
+                            <p class="message error">
+                                <%= err %>
+                            </p>
+                            <% }); %>
+                                <% } %>
+                </form>
+                <form action="/login" class="login-form" method="post">
+                    <input type="text" name="username" placeholder="username" />
+                    <input type="password" name="password" placeholder="password" />
+                    <button type="submit">login</button>
+                    <p class="message">Not registered?
+                        <a href="#">Create an account</a>
+                    </p>
+                    <% if (errors != null && showRegisterForm == null) { %>
+                        <% errors.forEach(function(err){ %>
+                            <p class="message error">
+                                <%= err %>
+                            </p>
+                            <% }); %>
+                                <% } if (success != null && showRegisterForm == null) { %>
+                                    <p class="message success">
+                                        <%= success %>
+                                    </p>
+                                    <% } %>
+                </form>
+            </div>
+        </div> -->
+    <!-- end form -->
+    <!-- </div> -->
+    <!-- end login container -->
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+    <% if(showRegisterForm != null && showRegisterForm === true) { %>
+        <script>
+            $('.register-form').show();
+            $('.login-form').hide();
+        </script>
+        <% } %>
+            <script>
+                $('.login__signup a').click(function () {
+                    $('form').animate({
+                        height: "toggle",
+                        opacity: "toggle"
+                    }, "slow");
+                });
+
+                $("#login-button").click(function (event) {
+                    $('form').fadeOut(500);
+                    $('.wrapper').addClass('form-success');
+                });
+                // $(".login-form").submit(function (e) {
+                //     return false;
+                // });
+                // $(".register-form").submit(function (e) {
+                //     return false;
+                // });
+            </script>
+
+            <!-- <script>
+                $(".login-form").submit(function (e) {
+                    return false;
+                });
+                $("#login-button").click(function (event) {
+                    event.preventDefault();
+
+                    var $username = $(".login-form input[name='username']").val();
+                    var $password = $(".login-form input[name='password']").val();
+
+                    console.log("Username: ", $username);
+                    console.log("Password: ", $password);
+
+                    $('form').fadeOut(500);
+                    $('.wrapper').addClass('form-success');
+
+                    // Send the data using post
+                    $.post("/login", {
+                        username: $username,
+                        password: $password
+                    });
+                });
+            </script> -->
+
+</body>
+
+</html>
