@@ -3,7 +3,7 @@
 var Mongoose = require('mongoose');
 
 var MessageSchema = new Mongoose.Schema({
-    messageText: String,
+    content: String,
     userId: String,
     roomId: String,
     date: {

@@ -2,6 +2,8 @@
 
 var config = require('../config');
 var Room = require('../models/room');
+var Message = require('../models/message');
+// var User = require('../models/user');
 
 /**
  * Encapsulates all code for emitting and listening to socket events
@@ -42,6 +44,7 @@ var ioEvents = function (io) {
 		socket.on('join', function (roomId) {
 			Room.findById(roomId, function (err, room) {
 				if (err) throw err;
+				console.log("FINDBYID ROOM: ", room);
 				if (!room) {
 					// Assuming that you already checked in router that chatroom exists
 					// Then, if a room doesn't exist here, return an error to inform the client-side.
@@ -55,7 +58,8 @@ var ioEvents = function (io) {
 					}
 
 					Room.addUser(room, socket, function (err, newRoom) {
-
+						console.log("ROOM: ", room);
+						console.log("NEWROOM: ", newRoom);
 						// Join the room channel
 						socket.join(newRoom.id);
 
@@ -63,7 +67,17 @@ var ioEvents = function (io) {
 							if (err) throw err;
 
 							// Return list of all user connected to the room to the current user
+							console.log("GETUSERS: ", users);
 							socket.emit('updateUsersList', users, true);
+
+							Message.find({
+								roomId: newRoom.id
+							}, function (err, message) {
+								Message.getMessages(message, socket, function (err, messages) {
+									console.log("GETMESS: ", messages);
+									socket.emit('updateMessagesList', users, messages);
+								});
+							});
 
 							// Return the current user to other connecting sockets in the room 
 							// ONLY if the user wasn't connected already to the current room
@@ -106,8 +120,12 @@ var ioEvents = function (io) {
 			// No need to emit 'addMessage' to the current socket
 			// As the new message will be added manually in 'main.js' file
 			socket.emit('addMessage', message);
-
 			socket.broadcast.to(roomId).emit('addMessage', message);
+			Message.create({
+				content: message.content,
+				userId: socket.request.session.passport.user,
+				roomId: message.roomId
+			});
 		});
 
 	});

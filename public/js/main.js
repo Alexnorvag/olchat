@@ -49,13 +49,23 @@ var app = {
 
       // Update users list upon emitting updateUsersList event
       socket.on('updateUsersList', function (users, clear) {
-
         $('.container p.message').remove();
         if (users.error != null) {
           $('.container').html(`<p class="message error">${users.error}</p>`);
         } else {
           app.helpers.updateUsersList(users, clear);
         }
+      });
+
+      // Update user messages upon emitting updateMessageList event
+      socket.on('updateMessagesList', function (users, messages) {
+        $('.container p.message').remove();
+        // if (messages.error != null) {
+        //   $('.container').html(`<p class="message error">${messages.error}</p>`);
+        // } else {
+        console.log("CLIENT MESSAGES: ", messages);
+        app.helpers.updateMessagesList(users, messages);
+        // }
       });
 
       // Whenever the user hits the save button, emit newMessage event.
@@ -67,12 +77,12 @@ var app = {
           var message = {
             content: messageContent,
             username: username,
+            roomId: roomId,
             date: Date.now()
           };
 
           socket.emit('newMessage', roomId, message);
           textareaEle.val('');
-          app.helpers.addMessage(message);
         }
       });
 
@@ -113,9 +123,42 @@ var app = {
       this.updateNumOfRooms();
     },
 
+    updateMessagesList: function (users, message) {
+
+      if (users.constructor !== Array) {
+        users = [users];
+      }
+
+      console.log("USERNAME: ", users)
+
+      var html = '';
+      for (var i = 0; i < message.length; i++) {
+        var testUsername;
+        for (var j = 0; j < users.length; j++) {
+          if (message[i].userId == users[j]._id) {
+            testUsername = users[j].username;
+          }
+        }
+        html = `<li>
+                      <div class="message-data">
+                        <span class="message-data-name">${testUsername}</span>
+                        <span class="message-data-time">${(new Date(message[i].date)).toLocaleString()}</span>
+                      </div>
+                      <div class="message my-message" dir="auto">${message[i].content}</div>
+                    </li>`;
+        $(html).hide().appendTo('.chat-history ul').slideDown(200);
+      }
+
+      // Keep scroll bar down
+      $(".chat-history").animate({
+        scrollTop: $('.chat-history')[0].scrollHeight * message.length / 2
+      }, 1000);
+    },
+
     // Update users list
     updateUsersList: function (users, clear) {
       if (users.constructor !== Array) {
+        console.log("NOT ARRAY!", users);
         users = [users];
       }
 

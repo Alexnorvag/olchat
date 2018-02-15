@@ -35,6 +35,7 @@ var addUser = function (room, socket, callback) {
 	// Get current user's id
 	var userId = socket.request.session.passport.user;
 
+
 	// Push a new connection object(i.e. {userId + socketId})
 	var conn = {
 		userId: userId,
@@ -57,7 +58,8 @@ var getUsers = function (room, socket, callback) {
 
 	// Loop on room's connections, Then:
 	room.connections.forEach(function (conn) {
-
+		console.log("CONNECTIONS.userid: ", conn.userId);
+		console.log("userid: ", userId);
 		// 1. Count the number of connections of the current user(using one or more sockets) to the passed room.
 		if (conn.userId === userId) {
 			cunt++;
@@ -73,14 +75,19 @@ var getUsers = function (room, socket, callback) {
 	// Loop on each user id, Then:
 	// Get the user object by id, and assign it to users array.
 	// So, users array will hold users' objects instead of ids.
+	var _users = [];
 	users.forEach(function (userId, i) {
+		console.log("ALL USERS: ", userId);
 		User.findById(userId, function (err, user) {
 			if (err) {
 				return callback(err);
 			}
-			users[i] = user;
+			console.log("!!@!@!@: ", user);
+			// users[i] = user;
+			// users.push(user);
+			_users.push(user);
 			if (i + 1 === users.length) {
-				return callback(null, users, cunt);
+				return callback(null, _users, cunt);
 			}
 		});
 	});
